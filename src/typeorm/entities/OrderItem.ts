@@ -19,6 +19,12 @@ export class OrderItem {
   @Column()
   price: number;
 
+  @Column()
+  size: number
+
+  @Column()
+  color: string;
+
   @ManyToOne(() => Product, (product) => product.orderItems, {
     onDelete: 'CASCADE',
   })

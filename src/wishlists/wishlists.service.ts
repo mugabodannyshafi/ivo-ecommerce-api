@@ -25,14 +25,12 @@ export class WishlistsService {
   ) {}
 
   async create(createWishlistDto: CreateWishlistDto, userId: string) {
-    console.log('--hello');
     const user = await this.userRepository.findOneBy({ userId });
     if (!user) throw new NotFoundException('User Not Found');
 
     const wishlist = await this.wishlistRepository.findOne({
       where: { user: { userId } },
     });
-    console.log('-->wishlist', wishlist);
     if (!wishlist) throw new NotFoundException('Wishlist not found');
 
     const product = await this.productRepository.findOneBy({
@@ -68,14 +66,23 @@ export class WishlistsService {
     const wishlist = await this.wishlistRepository.findOne({
       where: { user: { userId } },
     });
-    if (wishlist) throw new NotFoundException('wishlist Not Found');
+    if (wishlist === null) throw new NotFoundException('Wishlist Not Found');
 
     const wishlistItems = await this.wishlistItemRepository.find({
       where: {
         wishlist: { wishlistId: wishlist.wishlistId },
       },
+      relations: ['product'],
     });
-    return wishlistItems;
+
+    return wishlistItems.map((item) => ({
+      wishlistItemId: item.wishlistItemId,
+      productId: item.product.productId,
+      name: item.product.name,
+      price: item.product.price,
+      image: item.product.imageURL[0],
+      discount: item.product.discount,
+    }));
   }
 
   async clearWishlists(userId: string) {
@@ -85,7 +92,7 @@ export class WishlistsService {
     const wishlist = await this.wishlistRepository.findOne({
       where: { user: { userId } },
     });
-    if (wishlist) throw new NotFoundException('wishlist Not Found');
+    if (wishlist === null) throw new NotFoundException('wishlist Not Found');
 
     await this.wishlistItemRepository.delete({ wishlist });
 

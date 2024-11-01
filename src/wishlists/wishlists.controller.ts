@@ -35,7 +35,7 @@ export class WishlistsController {
     };
     return this.wishlistsService.create(createWishlistDto, json.userId);
   }
-  
+
   @UseGuards(JwtAuthGuard)
   @Get('my-wishlist')
   findOne(@Req() request: Request) {

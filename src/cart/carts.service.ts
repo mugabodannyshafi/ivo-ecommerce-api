@@ -73,6 +73,7 @@ export class CartsService {
       where: {
         cart: { cartId: cart.cartId },
       },
+      relations: ['product'],
     });
     return cartItems;
   }
@@ -100,6 +101,7 @@ export class CartsService {
     });
     if (!cart) throw new NotFoundException('Cart Not Found');
 
+    // Validate each product in the updates
     const productPromises = updates.map(async (update) => {
       const { productId, quantity } = update;
 
@@ -125,8 +127,9 @@ export class CartsService {
 
     await Promise.all(productPromises);
 
+    // Update the cart items with new quantity, price, and color
     const updatePromises = updates.map(async (update) => {
-      const { productId, quantity, price } = update;
+      const { productId, quantity, price, color } = update; // Add color here
 
       const cartItem = await this.cartItemsRepository.findOne({
         where: {
@@ -141,8 +144,10 @@ export class CartsService {
         );
       }
 
+      // Update the cart item's fields, including color
       cartItem.quantity = quantity;
       cartItem.price = price;
+      cartItem.color = color; // Set the new color here
 
       return this.cartItemsRepository.save(cartItem);
     });

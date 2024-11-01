@@ -34,7 +34,7 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Patch(':id')
+  @Patch()
   update(@Body() updateUserDto: UpdateUserDto, @Req() request: Request) {
     const token = request.headers.authorization.replace('Bearer ', '');
     const json = this.jwtService.decode(token, { json: true }) as {

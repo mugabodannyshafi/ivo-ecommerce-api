@@ -29,8 +29,8 @@ export class Product {
   @Column({ nullable: true })
   discount: number;
 
-  @Column()
-  size: string;
+  @Column('simple-array')
+  size: string[];
 
   @Column('simple-array')
   colors: string[];
