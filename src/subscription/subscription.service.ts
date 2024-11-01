@@ -15,7 +15,10 @@ export class SubscriptionService {
     const isValid = await this.subscriptionRepository.findOneBy({
       email: createSubscriptionDto.email,
     });
-    if (isValid) throw new ConflictException('email already exists');
+    if (isValid)
+      throw new ConflictException(
+        'you have already subscribed to our newsletter',
+      );
     const subscription = this.subscriptionRepository.create(
       createSubscriptionDto,
     );

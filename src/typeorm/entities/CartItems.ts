@@ -12,6 +12,12 @@ export class CartItem {
   @Column()
   quantity: number;
 
+  @Column()
+  color: string;
+
+  @Column()
+  size: string;
+
   @Column('decimal', { precision: 10, scale: 2 })
   price: number;
 

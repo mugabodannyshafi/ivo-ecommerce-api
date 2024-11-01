@@ -123,6 +123,7 @@ export class ProductsService {
   }
 
   async update(id: string, updateProductDto: UpdateProductDto, userId: string) {
+    console.log('--->updateUserDto', updateProductDto);
     const user = await this.userRepository.findOneBy({ userId });
     if (!user) throw new NotFoundException('User Not Found');
 
