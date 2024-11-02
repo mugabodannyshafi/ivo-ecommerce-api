@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { CollectionsService } from './collections.service';
 import { CollectionsController } from './collections.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Category } from 'src/typeorm/entities/Category';
-import { User } from 'src/typeorm/entities/User';
+import { Category } from '../typeorm/entities/Category';
+import { User } from '../typeorm/entities/User';
 import { JwtService } from '@nestjs/jwt';
-import { Product } from 'src/typeorm/entities/product';
+import { Product } from '../typeorm/entities/Product';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Category, User, Product])],

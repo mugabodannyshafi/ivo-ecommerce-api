@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { Wishlist } from './Wishlist';
-import { Product } from './product';
+import { Product } from './Product';
 
 
 @Entity({ name: 'wishlistItems' })

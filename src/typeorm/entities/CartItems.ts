@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { ShoppingCart } from './Cart';
-import { Product } from './product';
+import { Product } from './Product';
 @Entity({ name: 'cartItems' })
 export class CartItem {
   @PrimaryGeneratedColumn('uuid')

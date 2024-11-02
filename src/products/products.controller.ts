@@ -15,7 +15,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
-import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 
 @Controller('products')
 export class ProductsController {

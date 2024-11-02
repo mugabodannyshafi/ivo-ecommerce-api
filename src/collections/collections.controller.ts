@@ -12,7 +12,7 @@ import {
 import { CollectionsService } from './collections.service';
 import { CreateCollectionDto } from './dto/create-collection.dto';
 import { UpdateCollectionDto } from './dto/update-collection.dto';
-import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
 

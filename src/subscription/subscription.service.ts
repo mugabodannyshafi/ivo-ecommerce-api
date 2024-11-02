@@ -1,6 +1,6 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Subscription } from 'src/typeorm/entities/Subscription';
+import { Subscription } from '../typeorm/entities/Subscription';
 import { Repository } from 'typeorm';
 import { CreateSubscriptionDto } from './dto/create-subscription.dto';
 
