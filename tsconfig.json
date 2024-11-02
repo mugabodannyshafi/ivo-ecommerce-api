@@ -18,9 +18,10 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "src/*": ["src/*"]
+      "src/*": ["src/*"],
+      "typeorm/*": ["src/typeorm/*"]
     }
   },
-  "include": ["src/**/*", "types/express-session.d.ts"], // Add or modify this
+  "include": ["src/**/*", "types/express-session.d.ts"], 
   "exclude": ["node_modules"]
 }
