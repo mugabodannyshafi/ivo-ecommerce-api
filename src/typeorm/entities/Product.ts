@@ -6,7 +6,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { CartItem } from './CartItems';
-import { OrderItem } from './orderItem';
+import { OrderItem } from './OrderItem';
 import { Category } from './Category';
 
 @Entity({ name: 'products' })

@@ -10,7 +10,7 @@ import { User } from './typeorm/entities/User';
 import { ShoppingCart } from './typeorm/entities/Cart';
 import { CartItem } from './typeorm/entities/CartItems';
 import { Order } from './typeorm/entities/Order';
-import { OrderItem } from './typeorm/entities/orderItem';
+import { OrderItem } from './typeorm/entities/OrderItem';
 import { Wishlist } from './typeorm/entities/Wishlist';
 import { WishlistItem } from './typeorm/entities/WishlistItems';
 import { Category } from './typeorm/entities/Category';
@@ -18,7 +18,7 @@ import { Payment } from './typeorm/entities/Payment';
 import { AuthModule } from './auth/auth.module';
 import { ProductsModule } from './products/products.module';
 import { CollectionsModule } from './collections/collections.module';
-import { Product } from './typeorm/entities/product';
+import { Product } from "./typeorm/entities/Product"
 import { CartsModule } from './cart/carts.module';
 import { OrdersModule } from './orders/orders.module';
 import { WishlistsModule } from './wishlists/wishlists.module';

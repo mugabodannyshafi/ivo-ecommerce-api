@@ -6,7 +6,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { User } from './User';
-import { OrderItem } from './orderItem';
+import { OrderItem } from './OrderItem';
 
 @Entity({ name: 'orders' })
 export class Order {
