@@ -7,14 +7,10 @@ import {
 } from 'class-validator';
 
 export class ResetPasswordDto {
-  @IsString()
-  @IsNotEmpty()
-  resetToken: string;
-
   @MinLength(5)
   @IsNotEmpty()
   @IsString()
-  newPassword: string;
+  password: string;
 
   @MinLength(5)
   @IsNotEmpty()

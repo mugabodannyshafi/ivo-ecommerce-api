@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   HttpException,
+  BadRequestException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UserDto } from './dto/create-auth.dto';
@@ -53,8 +54,20 @@ export class AuthController {
     return this.authService.forgotPassword(forgotPasswordDto.email);
   }
 
-  @Post('reset-password')
-  async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
-    return this.authService.resetPassword(resetPasswordDto);
+  @Post('reset-password/:token')
+  async resetPassword(
+    @Param('token') resetToken: string,
+    @Body() resetPasswordDto: ResetPasswordDto,
+  ) {
+    return this.authService.resetPassword(resetToken, resetPasswordDto);
+  }
+
+  @Post('verify-token')
+  async verifyPassword(@Body('resetToken') resetToken: string) {
+    if (!resetToken) {
+      throw new BadRequestException('Token is required');
+    }
+
+    return this.authService.verifyPassword(resetToken);
   }
 }

@@ -80,7 +80,7 @@ export class ProductsService {
   }
 
   async findAll(query: number) {
-    const resultPerPage = 6;
+    const resultPerPage = 9;
     const currentPage = Number(query) || 1;
     const skip = (currentPage - 1) * resultPerPage;
 
