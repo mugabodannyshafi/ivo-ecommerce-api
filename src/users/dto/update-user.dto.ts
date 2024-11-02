@@ -23,4 +23,7 @@ export class UpdateUserDto {
 
   @IsOptional()
   profile?: string;
+
+  @IsOptional()
+  role?: string;
 }
