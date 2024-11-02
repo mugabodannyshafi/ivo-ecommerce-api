@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../typeorm/entities/User';
 import { Category } from '../typeorm/entities/Category';
-import { Product } from '../typeorm/entities/product';
+import { Product } from '../typeorm/entities/Product';
 import { Subscription } from '../typeorm/entities/Subscription';
 import { BullModule } from '@nestjs/bull';
 

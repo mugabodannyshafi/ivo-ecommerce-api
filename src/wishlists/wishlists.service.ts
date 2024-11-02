@@ -9,7 +9,7 @@ import { Wishlist } from '../typeorm/entities/Wishlist';
 import { Repository } from 'typeorm';
 import { WishlistItem } from '../typeorm/entities/WishlistItems';
 import { User } from '../typeorm/entities/User';
-import { Product } from '../typeorm/entities/product';
+import { Product } from '../typeorm/entities/Product';
 
 @Injectable()
 export class WishlistsService {

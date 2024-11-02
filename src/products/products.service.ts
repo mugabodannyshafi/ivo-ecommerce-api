@@ -10,7 +10,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../typeorm/entities/User';
 import { Category } from '../typeorm/entities/Category';
-import { Product } from '../typeorm/entities/product';
+import { Product } from '../typeorm/entities/Product';
 import { Subscription } from '../typeorm/entities/Subscription';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';

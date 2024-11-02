@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ShoppingCart } from '../typeorm/entities/Cart';
 import { CartItem } from '../typeorm/entities/CartItems';
 import { Order } from '../typeorm/entities/Order';
-import { OrderItem } from '../typeorm/entities/orderItem';
+import { OrderItem } from '../typeorm/entities/OrderItem';
 import { User } from '../typeorm/entities/User';
 import { Repository } from 'typeorm';
 import { CreateOrderDto } from './dtos/create-order.dto';

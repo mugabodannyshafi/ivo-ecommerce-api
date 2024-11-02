@@ -4,7 +4,7 @@ import { CartsController } from './carts.controller';
 import { JwtService } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../typeorm/entities/User';
-import { Product } from '../typeorm/entities/product';
+import { Product } from '../typeorm/entities/Product';
 import { CartItem } from '../typeorm/entities/CartItems';
 import { ShoppingCart } from '../typeorm/entities/Cart';
 

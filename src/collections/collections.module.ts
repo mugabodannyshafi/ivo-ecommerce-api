@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Category } from '../typeorm/entities/Category';
 import { User } from '../typeorm/entities/User';
 import { JwtService } from '@nestjs/jwt';
-import { Product } from '../typeorm/entities/product';
+import { Product } from '../typeorm/entities/Product';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Category, User, Product])],

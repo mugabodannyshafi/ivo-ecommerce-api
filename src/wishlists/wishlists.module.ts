@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { WishlistItem } from '../typeorm/entities/WishlistItems';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../typeorm/entities/User';
-import { Product } from '../typeorm/entities/product';
+import { Product } from '../typeorm/entities/Product';
 import { Wishlist } from '../typeorm/entities/Wishlist';
 
 @Module({
