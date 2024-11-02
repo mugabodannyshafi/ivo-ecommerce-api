@@ -39,7 +39,6 @@ export class OrdersService {
       where: { cart: { cartId: cart.cartId } },
       relations: ['product'],
     });
-    console.log('-->cartItem', cartItems);
     if (!cartItems || cartItems.length === 0)
       throw new NotFoundException('Your cart is empty');
 
@@ -61,10 +60,14 @@ export class OrdersService {
         product: item.product,
         quantity: item.quantity,
         price: item.price,
+        color: item.color,
+        size: item.size,
       });
     });
 
-    await this.orderItemRepository.save(orderItems);
+    const result = await this.orderItemRepository.save(orderItems);
+
+    console.log('----->result', result);
 
     await this.cartItemRepository.remove(cartItems);
 

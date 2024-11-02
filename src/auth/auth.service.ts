@@ -82,7 +82,6 @@ export class AuthService {
       throw new UnauthorizedException('Invalid refresh token');
     }
 
-    // Validate the provided refresh token with the stored hashed token
     const refreshTokenMatch = await bcrypt.compare(
       refreshToken,
       user.refreshToken,
@@ -127,51 +126,62 @@ export class AuthService {
     return { message: 'Check your email address' };
   }
 
-  async resetPassword(resetPasswordDto: ResetPasswordDto) {
-    const { newPassword, confirmPassword } = resetPasswordDto;
-    if (newPassword !== confirmPassword) {
+  async resetPassword(resetToken: string, resetPasswordDto: ResetPasswordDto) {
+    const { password, confirmPassword } = resetPasswordDto;
+    if (password !== confirmPassword) {
       throw new BadRequestException('Passwords must be equal');
     }
-
+  
     const token = await this.userRepository.findOne({
-      where: {
-        resetPasswordToken: resetPasswordDto.resetToken,
-      },
+      where: { resetPasswordToken: resetToken },
     });
-
+  
     if (!token) {
       throw new UnauthorizedException('Incorrect token');
     }
     if (token.resetPasswordExpires < new Date()) {
-      throw new BadRequestException(
-        'Token has expired. Please request a new one.',
-      );
+      throw new BadRequestException('Token has expired. Please request a new one.');
     }
-
-    if (token) {
-      token.resetPasswordToken = null;
-      token.resetPasswordExpires = null;
-      await this.userRepository.save(token);
-
-      const user = await this.userRepository.findOneBy({
-        userId: token.userId,
-      });
-
-      if (user) {
-        const hashedPwd = await bcrypt.hash(resetPasswordDto.newPassword, 10);
-        user.password = hashedPwd;
-        await this.userRepository.save(user);
-
-        return { message: 'Password changed successfully' };
-      }
-    } else {
-      throw new BadRequestException('Token not found or expired');
+  
+    token.resetPasswordToken = null;
+    token.resetPasswordExpires = null;
+    await this.userRepository.save(token);
+  
+    const user = await this.userRepository.findOneBy({ userId: token.userId });
+    if (user) {
+      user.password = await bcrypt.hash(password, 10);
+      await this.userRepository.save(user);
+  
+      return { message: 'Password changed successfully' };
     }
+  
+    throw new BadRequestException('User not found');
   }
-
+  
   async logout(userId: string) {
     const user = await this.userRepository.findOne({ where: { userId } });
     user.refreshToken = null;
     await this.userRepository.save(user);
+  }
+
+  async verifyPassword(resetToken: string) {
+    if (!resetToken) {
+      throw new BadRequestException('Token is required');
+    }
+
+    const user = await this.userRepository.findOne({
+      where: {
+        resetPasswordToken: resetToken,
+        resetPasswordExpires: MoreThanOrEqual(new Date()),
+      },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException(
+        'Password reset token is invalid or has expired',
+      );
+    }
+
+    return { token: user.resetPasswordToken };
   }
 }

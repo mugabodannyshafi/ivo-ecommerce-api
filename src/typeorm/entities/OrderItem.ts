@@ -20,7 +20,7 @@ export class OrderItem {
   price: number;
 
   @Column()
-  size: number
+  size: string;
 
   @Column()
   color: string;
