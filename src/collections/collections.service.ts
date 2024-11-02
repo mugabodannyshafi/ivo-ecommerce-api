@@ -7,9 +7,9 @@ import {
 import { CreateCollectionDto } from './dto/create-collection.dto';
 import { UpdateCollectionDto } from './dto/update-collection.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Category } from 'src/typeorm/entities/Category';
+import { Category } from '../typeorm/entities/Category';
 import { Repository } from 'typeorm';
-import { User } from 'src/typeorm/entities/User';
+import { User } from '../typeorm/entities/User';
 
 @Injectable()
 export class CollectionsService {

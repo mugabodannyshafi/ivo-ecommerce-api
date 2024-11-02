@@ -8,10 +8,10 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from 'src/typeorm/entities/User';
-import { Category } from 'src/typeorm/entities/Category';
-import { Product } from 'src/typeorm/entities/product';
-import { Subscription } from 'src/typeorm/entities/Subscription';
+import { User } from '../typeorm/entities/User';
+import { Category } from '../typeorm/entities/Category';
+import { Product } from '../typeorm/entities/product';
+import { Subscription } from '../typeorm/entities/Subscription';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
 

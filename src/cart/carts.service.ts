@@ -7,11 +7,11 @@ import {
 import { CreateCartDto } from './dto/create-cart.dto';
 import { UpdateCartDto } from './dto/update-cart.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ShoppingCart as Cart } from 'src/typeorm/entities/Cart';
+import { ShoppingCart as Cart } from '../typeorm/entities/Cart';
 import { Repository } from 'typeorm';
-import { CartItem as CartItems } from 'src/typeorm/entities/CartItems';
-import { User } from 'src/typeorm/entities/User';
-import { Product } from 'src/typeorm/entities/Product';
+import { CartItem as CartItems } from '../typeorm/entities/CartItems';
+import { User } from '../typeorm/entities/User';
+import { Product } from '../typeorm/entities/Product';
 
 @Injectable()
 export class CartsService {

@@ -7,7 +7,7 @@ import {
 import { UserDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/typeorm/entities/User';
+import { User } from '../typeorm/entities/User';
 import { LessThan, MoreThanOrEqual, Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
@@ -15,8 +15,8 @@ import { AuthPayloadDto } from './dto/login.auth.dto';
 import { ResetPasswordDto } from './dto/change-password.dto';
 import { Queue } from 'bullmq';
 import { InjectQueue } from '@nestjs/bull';
-import { ShoppingCart as Cart } from 'src/typeorm/entities/Cart';
-import { Wishlist } from 'src/typeorm/entities/Wishlist';
+import { ShoppingCart as Cart } from '../typeorm/entities/Cart';
+import { Wishlist } from '../typeorm/entities/Wishlist';
 
 @Injectable()
 export class AuthService {

@@ -11,7 +11,7 @@ import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dtos/create-order.dto';
 import { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
-import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 
 @Controller('orders')
 export class OrdersController {

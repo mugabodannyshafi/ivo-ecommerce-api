@@ -1,6 +1,5 @@
 import { PartialType } from '@nestjs/swagger';
 import { CreateUserDto } from './create-user.dto';
-import { UserDto } from 'src/auth/dto/create-auth.dto';
 import {
   IsEmail,
   isNotEmpty,

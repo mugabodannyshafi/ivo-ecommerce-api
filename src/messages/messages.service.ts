@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Message } from 'src/typeorm/entities/Message';
+import { Message } from '../typeorm/entities/Message';
 import { Repository } from 'typeorm';
 import { CreateMessageDto } from './dto/create-message.dto';
-import { User } from 'src/typeorm/entities/User';
+import { User } from '../typeorm/entities/User';
 import { Queue } from 'bull';
 import { InjectQueue } from '@nestjs/bull';
 

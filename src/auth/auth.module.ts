@@ -2,15 +2,15 @@ import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from 'src/typeorm/entities/User';
+import { User } from '../typeorm/entities/User';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/LocalStrategy';
 import { BullModule } from '@nestjs/bull';
-import { MailService } from 'src/mail/mail.service';
-import { MailProcessor } from 'src/mail/mail.process';
-import { ShoppingCart as Cart } from 'src/typeorm/entities/Cart';
-import { Wishlist } from 'src/typeorm/entities/Wishlist';
+import { MailService } from '../mail/mail.service';
+import { MailProcessor } from '../mail/mail.process';
+import { ShoppingCart as Cart } from '../typeorm/entities/Cart';
+import { Wishlist } from '../typeorm/entities/Wishlist';
 
 @Module({
   imports: [
