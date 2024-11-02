@@ -5,13 +5,11 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { UserDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../typeorm/entities/User';
 import { LessThan, MoreThanOrEqual, Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { AuthPayloadDto } from './dto/login.auth.dto';
 import { ResetPasswordDto } from './dto/change-password.dto';
 import { Queue } from 'bullmq';
 import { InjectQueue } from '@nestjs/bull';
@@ -131,33 +129,35 @@ export class AuthService {
     if (password !== confirmPassword) {
       throw new BadRequestException('Passwords must be equal');
     }
-  
+
     const token = await this.userRepository.findOne({
       where: { resetPasswordToken: resetToken },
     });
-  
+
     if (!token) {
       throw new UnauthorizedException('Incorrect token');
     }
     if (token.resetPasswordExpires < new Date()) {
-      throw new BadRequestException('Token has expired. Please request a new one.');
+      throw new BadRequestException(
+        'Token has expired. Please request a new one.',
+      );
     }
-  
+
     token.resetPasswordToken = null;
     token.resetPasswordExpires = null;
     await this.userRepository.save(token);
-  
+
     const user = await this.userRepository.findOneBy({ userId: token.userId });
     if (user) {
       user.password = await bcrypt.hash(password, 10);
       await this.userRepository.save(user);
-  
+
       return { message: 'Password changed successfully' };
     }
-  
+
     throw new BadRequestException('User not found');
   }
-  
+
   async logout(userId: string) {
     const user = await this.userRepository.findOne({ where: { userId } });
     user.refreshToken = null;
