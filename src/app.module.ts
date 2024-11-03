@@ -63,7 +63,6 @@ import { URL } from 'url';
               Message,
             ],
             synchronize: false,
-            logging: true,
           };
         } else {
           return {

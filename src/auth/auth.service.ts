@@ -49,7 +49,9 @@ export class AuthService {
     await this.cartRepository.save(newCart);
     const newWishlist = this.wishlistRepository.create({ user: result });
     await this.wishlistRepository.save(newWishlist);
-    return result;
+    return {
+      message: 'user Created Successful',
+    };
   }
 
   async validateUser(email: string, password: string): Promise<any> {

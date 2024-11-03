@@ -6,8 +6,6 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
-  Matches,
-  MinLength,
 } from 'class-validator';
 
 export class UpdateUserDto {
@@ -23,7 +21,4 @@ export class UpdateUserDto {
 
   @IsOptional()
   profile?: string;
-
-  @IsOptional()
-  role?: string;
 }
