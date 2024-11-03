@@ -87,6 +87,7 @@ export class ProductsService {
     const products = await this.productRepository.find({
       take: resultPerPage,
       skip,
+      relations: ['category'],
     });
 
     return products;
@@ -112,18 +113,15 @@ export class ProductsService {
     if (!category) throw new NotFoundException('Category Not Found');
 
     const results = await this.productRepository.find({
-      where: {
-        category: category,
-      },
       take: resultPerPage,
       skip,
+      where: { category: { name } },
+      relations: ['category'],
     });
-
     return results;
   }
 
   async update(id: string, updateProductDto: UpdateProductDto, userId: string) {
-    console.log('--->updateUserDto', updateProductDto);
     const user = await this.userRepository.findOneBy({ userId });
     if (!user) throw new NotFoundException('User Not Found');
 
