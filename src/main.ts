@@ -6,8 +6,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const allowedOrigins =
     process.env.NODE_ENV === 'prod'
-      ? ['https://ivo-online-shop.vercel.app/']
-      : ['http://localhost:5173/'];
+      ? ['https://ivo-online-shop.vercel.app', 'https://ivo-shop.netlify.app']
+      : ['http://localhost:5173'];
   app.enableCors({
     origin: allowedOrigins,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
