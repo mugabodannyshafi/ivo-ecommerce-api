@@ -28,6 +28,15 @@ export class Order {
   @Column('decimal', { precision: 10, scale: 2 })
   totalAmount: number;
 
+  @Column()
+  city: string;
+
+  @Column()
+  phone: string;
+
+  @Column()
+  country: string;
+
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 

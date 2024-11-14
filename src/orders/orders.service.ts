@@ -11,6 +11,8 @@ import { OrderItem } from '../typeorm/entities/OrderItem';
 import { User } from '../typeorm/entities/User';
 import { Repository } from 'typeorm';
 import { CreateOrderDto } from './dtos/create-order.dto';
+import { Product } from '../typeorm/entities/Product';
+import { UpdateOrderStatus } from './dtos/update-order-status.dto';
 
 @Injectable()
 export class OrdersService {
@@ -24,6 +26,8 @@ export class OrdersService {
     private readonly cartRepository: Repository<ShoppingCart>,
     @InjectRepository(CartItem)
     private readonly cartItemRepository: Repository<CartItem>,
+    @InjectRepository(Product)
+    private readonly productsRepository: Repository<Product>,
   ) {}
 
   async checkout(createOrderDto: CreateOrderDto, userId: string) {
@@ -59,15 +63,13 @@ export class OrdersService {
         order: savedOrder,
         product: item.product,
         quantity: item.quantity,
-        price: item.price,
+        price: Number(item.price),
         color: item.color,
         size: item.size,
       });
     });
 
-    const result = await this.orderItemRepository.save(orderItems);
-
-    console.log('----->result', result);
+    await this.orderItemRepository.save(orderItems);
 
     await this.cartItemRepository.remove(cartItems);
 
@@ -87,6 +89,52 @@ export class OrdersService {
     });
 
     return orders;
+  }
+
+  async adminFindUserOrders(admin: string, userId: string) {
+    const adminUser = await this.userRepository.findOneBy({ userId: admin });
+    if (!adminUser) throw new NotFoundException('User Not Found');
+
+    if (adminUser.role !== 'admin') {
+      throw new ForbiddenException('Only admin is allowed to view all orders');
+    }
+
+    const user = await this.userRepository.findOneBy({ userId });
+    if (!user) throw new NotFoundException('User Not Found');
+    console.log('---->user', user)
+
+    const orders = await this.orderRepository.find({
+      where: { user },
+    });
+
+    console.log('---->orders', orders);
+  }
+
+  async findOrders(userId: string) {
+    const user = await this.userRepository.findOneBy({ userId });
+    if (!user) throw new NotFoundException('User Not Found');
+
+    if (user.role !== 'admin') {
+      throw new ForbiddenException('Only admin is allowed to view all orders');
+    }
+
+    const orders = await this.orderRepository.find({
+      relations: ['user'],
+    });
+    const data = orders.map((order) => ({
+      id: order.orderId,
+      customerFirstName: order.user.firstName,
+      userId: user.userId,
+      customerLastName: order.user.lastName,
+      orderDate: order.orderDate,
+      orderTotal: order.totalAmount,
+      phoneNumber: order.phone,
+      shippingAddress: order.address,
+      shippingCity: order.city,
+      orderStatus: order.status,
+    }));
+
+    return data;
   }
 
   async findOne(orderId: string, userId: string) {
@@ -119,12 +167,16 @@ export class OrdersService {
       where: {
         orderId,
       },
-      relations: ['orderItems', 'orderItems.product'],
+      relations: ['orderItems', 'orderItems.product', 'user'],
     });
     return order;
   }
 
-  async updateOrderStatus(orderId: string, userId: string, newStatus: string) {
+  async updateOrderStatus(
+    orderId: string,
+    userId: string,
+    updateOrderStatus: UpdateOrderStatus,
+  ) {
     const user = await this.userRepository.findOneBy({ userId });
     if (!user) throw new NotFoundException('User Not Found');
 
@@ -134,9 +186,9 @@ export class OrdersService {
       );
     }
 
-    const validStatus = ['pending', 'delivered', 'cancelled'];
+    const validStatus = ['pending', 'processing', 'delivered', 'cancelled'];
 
-    if (!validStatus.includes(newStatus)) {
+    if (!validStatus.includes(updateOrderStatus.newStatus)) {
       throw new ForbiddenException('Invalid order status');
     }
 
@@ -149,10 +201,55 @@ export class OrdersService {
       throw new NotFoundException('Order not found');
     }
 
-    order.status = newStatus;
+    order.status = updateOrderStatus.newStatus;
 
     const updatedOrder = await this.orderRepository.save(order);
 
     return updatedOrder;
+  }
+
+  async findProductOrders(userId: string, productId: string) {
+    const user = await this.userRepository.findOneBy({ userId });
+    if (!user) throw new NotFoundException('User Not Found');
+
+    if (user.role !== 'admin') {
+      throw new ForbiddenException(
+        'Only admin is allowed to view product orders',
+      );
+    }
+
+    const product = await this.productsRepository.findOne({
+      where: { productId },
+    });
+    if (!product) throw new NotFoundException('Product Not Found');
+
+    const orders = await this.orderRepository.find({
+      relations: ['orderItems', 'orderItems.product', 'user'],
+    });
+
+    const filteredOrders = orders
+      .filter((order) =>
+        order.orderItems.some((item) => item.product.productId === productId),
+      )
+      .map((order) => ({
+        orderId: order.orderId,
+        customerName: `${order.user.firstName} ${order.user.lastName}`,
+        orderDate: order.orderDate,
+        orderStatus: order.status,
+        totalAmount: order.totalAmount,
+        shippingAddress: order.address,
+        shippingCity: order.city,
+        phoneNumber: order.phone,
+        items: order.orderItems
+          .filter((item) => item.product.productId === productId)
+          .map((item) => ({
+            quantity: item.quantity,
+            price: item.price,
+            color: item.color,
+            size: item.size,
+          })),
+      }));
+
+    return filteredOrders;
   }
 }

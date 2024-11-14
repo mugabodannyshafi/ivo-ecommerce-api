@@ -30,69 +30,12 @@ import { Product } from './typeorm/entities/Product';
 import { Message } from './typeorm/entities/Message';
 
 import { URL } from 'url';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    TypeOrmModule.forRootAsync({
-      useFactory: () => {
-        if (process.env.NODE_ENV === 'prod') {
-          const dbUrl = new URL(process.env.DATABASE_URL);
-          const routingId = dbUrl.searchParams.get('options');
-          dbUrl.searchParams.delete('options');
-
-          return {
-            type: 'cockroachdb',
-            url: dbUrl.toString(),
-            ssl: true,
-            extra: {
-              options: routingId,
-            },
-            entities: [
-              User,
-              Subscription,
-              ShoppingCart,
-              CartItem,
-              Order,
-              OrderItem,
-              Wishlist,
-              WishlistItem,
-              Category,
-              Payment,
-              Product,
-              Message,
-            ],
-            synchronize: false,
-          };
-        } else {
-          return {
-            type: 'postgres',
-            host: process.env.DATABASE_HOST,
-            port: parseInt(process.env.DATABASE_PORT, 10),
-            username: process.env.DATABASE_USER,
-            password: process.env.DATABASE_PASSWORD,
-            database: process.env.DATABASE_NAME,
-            entities: [
-              User,
-              Subscription,
-              ShoppingCart,
-              CartItem,
-              Order,
-              OrderItem,
-              Wishlist,
-              WishlistItem,
-              Category,
-              Payment,
-              Product,
-              Message,
-            ],
-            synchronize: true, // Enable only for development
-          };
-        }
-      },
-    }),
-
-    // Redis configuration for BullMQ
+    
     BullModule.forRoot({
       redis: {
         host: 'localhost',
@@ -100,7 +43,6 @@ import { URL } from 'url';
       },
     }),
 
-    // Application modules
     AuthModule,
     UsersModule,
     ProductsModule,
@@ -110,6 +52,7 @@ import { URL } from 'url';
     WishlistsModule,
     SubscriptionModule,
     MessagesModule,
+    DatabaseModule,
   ],
   controllers: [AppController],
   providers: [AppService],

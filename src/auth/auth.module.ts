@@ -6,7 +6,6 @@ import { User } from '../typeorm/entities/User';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/LocalStrategy';
-import { BullModule } from '@nestjs/bull';
 import { MailService } from '../mail/mail.service';
 import { MailProcessor } from '../mail/mail.process';
 import { ShoppingCart as Cart } from '../typeorm/entities/Cart';
@@ -19,14 +18,6 @@ import { Wishlist } from '../typeorm/entities/Wishlist';
       secret: 'abc.456',
       signOptions: { expiresIn: '1h' },
     }),
-    BullModule.registerQueue(
-      {
-        name: 'mailQueue',
-      },
-      {
-        name: 'fileUpload',
-      },
-    ),
   ],
   controllers: [AuthController],
   providers: [

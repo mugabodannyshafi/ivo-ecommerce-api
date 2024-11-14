@@ -67,7 +67,6 @@ export class CartsController {
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string, @Req() request: Request) {
-    console.log('--->inside here')
     const token = request.headers.authorization.replace('Bearer ', '');
     const json = this.jwtService.decode(token, { json: true }) as {
       userId: string;

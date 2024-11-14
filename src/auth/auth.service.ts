@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  Inject,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -11,10 +12,11 @@ import { LessThan, MoreThanOrEqual, Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { ResetPasswordDto } from './dto/change-password.dto';
-import { Queue } from 'bullmq';
-import { InjectQueue } from '@nestjs/bull';
+// import { Queue } from 'bullmq';
+// import { InjectQueue } from '@nestjs/bull';
 import { ShoppingCart as Cart } from '../typeorm/entities/Cart';
 import { Wishlist } from '../typeorm/entities/Wishlist';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class AuthService {
@@ -22,9 +24,10 @@ export class AuthService {
     private jwtService: JwtService,
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     @InjectRepository(Cart) private readonly cartRepository: Repository<Cart>,
-    @InjectQueue('mailQueue') private readonly mailQueue: Queue,
+    // @InjectQueue('mailQueue') private readonly mailQueue: Queue,
     @InjectRepository(Wishlist)
     private readonly wishlistRepository: Repository<Wishlist>,
+    @Inject() private readonly mailService: MailService,
   ) {}
 
   async create(createAuthDto: UserDto) {
@@ -105,7 +108,7 @@ export class AuthService {
       const resetToken = Math.floor(10000 + Math.random() * 90000).toString();
       const otpExpiresAt = new Date(Date.now() + 5 * 60 * 1000);
 
-      const result = await this.userRepository.update(
+      await this.userRepository.update(
         { email },
         {
           resetPasswordToken: resetToken,
@@ -113,15 +116,12 @@ export class AuthService {
         },
       );
 
-      await this.mailQueue.add(
-        'sendResetMail',
-        {
-          username: user.lastName,
-          to: email,
-          token: resetToken,
-        },
-        { delay: 3000, lifo: true },
+      await this.mailService.sendPasswordResetEmail(
+        email,
+        resetToken,
+        user.lastName,
       );
+
     }
     return { message: 'Check your email address' };
   }

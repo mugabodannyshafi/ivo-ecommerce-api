@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   ForbiddenException,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -14,6 +15,9 @@ import { Product } from '../typeorm/entities/Product';
 import { Subscription } from '../typeorm/entities/Subscription';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
+import { MailService } from 'src/mail/mail.service';
+import { PaginationQueryDto } from 'src/dto/pagination-query.dto';
+import { BaseService } from 'src/base.service';
 
 @Injectable()
 export class ProductsService {
@@ -25,7 +29,8 @@ export class ProductsService {
     private readonly categoryRepository: Repository<Category>,
     @InjectRepository(Subscription)
     private readonly subscriptionRepository: Repository<Subscription>,
-    @InjectQueue('mailQueue') private readonly mailQueue: Queue,
+    @Inject(MailService) private readonly mailService: MailService,
+    private readonly baseService: BaseService,
   ) {}
 
   async create(createProductDto: CreateProductDto, userId: string) {
@@ -56,20 +61,16 @@ export class ProductsService {
     if (savedProduct) {
       const subscribers = await this.subscriptionRepository.find();
       subscribers.forEach(async (subscriber) => {
-        await this.mailQueue.add(
-          'sendNewProduct',
-          {
-            to: subscriber.email,
-            name: savedProduct.name,
-            description: savedProduct.description,
-            imagePath: savedProduct.imageURL,
-            price: savedProduct.price,
-            category: savedProduct.category.name,
-            quantity: savedProduct.stockQuantity,
-            discount: savedProduct.discount,
-            size: savedProduct.size,
-          },
-          { delay: 3000, lifo: true },
+        await this.mailService.sendNewProduct(
+          subscriber.email,
+          savedProduct.name,
+          savedProduct.description,
+          savedProduct.imageURL[0],
+          savedProduct.price,
+          savedProduct.category.name,
+          savedProduct.stockQuantity,
+          savedProduct.discount,
+          savedProduct.size,
         );
       });
     }
@@ -79,24 +80,45 @@ export class ProductsService {
     };
   }
 
-  async findAll(query: number) {
-    const resultPerPage = 9;
-    const currentPage = Number(query) || 1;
-    const skip = (currentPage - 1) * resultPerPage;
+  async findAll(paginationQuery: PaginationQueryDto) {
+    const { skip, take } =
+      this.baseService.initializePagination(paginationQuery);
 
-    const products = await this.productRepository.find({
-      take: resultPerPage,
+    const [products, totalCount] = await this.productRepository.findAndCount({
+      take,
       skip,
       relations: ['category'],
     });
 
-    return products;
+    return this.baseService.paginate(products, totalCount, paginationQuery);
   }
 
   async findOne(id: string) {
-    const product = await this.productRepository.findOneBy({ productId: id });
+    const product = await this.productRepository.findOne({
+      where: { productId: id },
+      relations: ['category'],
+    });
     if (!product) throw new NotFoundException('Product Not Found');
     return product;
+  }
+
+  async findPopular() {
+    const products = await this.productRepository.find();
+    const sortedProducts = products.sort(
+      (a, b) => b.stockQuantity - a.stockQuantity,
+    );
+
+    const topProducts = sortedProducts.slice(0, 3);
+
+    const data = topProducts.map((product) => ({
+      productId: product.productId,
+      product_name: product.name,
+      product_image: product.imageURL[0],
+      product_price: product.price,
+      product_stock: product.stockQuantity,
+    }));
+
+    return data;
   }
 
   async findByCategory(name: string, query: number) {

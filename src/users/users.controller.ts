@@ -10,7 +10,6 @@ import {
   Req,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { Request } from 'express';
@@ -41,6 +40,11 @@ export class UsersController {
       userId: string;
     };
     return this.usersService.update(json.userId, updateUserDto);
+  }
+
+  @Get('static/gender')
+  usersSex() {
+    return this.usersService.usersSex();
   }
 
   @UseGuards(JwtAuthGuard)
