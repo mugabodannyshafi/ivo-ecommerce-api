@@ -37,7 +37,7 @@ export class UserDto {
 
   @IsString()
   @IsNotEmpty()
-  phoneNumber: true;
+  phoneNumber: string;
 
   @IsString()
   @IsOptional()
