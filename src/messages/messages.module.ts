@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Message } from '../typeorm/entities/Message';
 import { User } from '../typeorm/entities/User';
 import { BullModule } from '@nestjs/bull';
+import { MailService } from 'src/mail/mail.service';
 
 @Module({
   imports: [
@@ -19,6 +20,6 @@ import { BullModule } from '@nestjs/bull';
     ),
   ],
   controllers: [MessagesController],
-  providers: [MessagesService],
+  providers: [MessagesService, MailService],
 })
 export class MessagesModule {}

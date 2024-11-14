@@ -44,6 +44,9 @@ importers:
       '@types/crypto-js':
         specifier: ^4.2.2
         version: 4.2.2
+      '@types/luxon':
+        specifier: ^3.4.2
+        version: 3.4.2
       '@types/nodemailer':
         specifier: ^6.4.16
         version: 6.4.16
@@ -65,6 +68,9 @@ importers:
       dotenv:
         specifier: ^16.4.5
         version: 16.4.5
+      luxon:
+        specifier: ^3.5.0
+        version: 3.5.0
       mysql2:
         specifier: ^3.11.3
         version: 3.11.3
@@ -800,6 +806,9 @@ packages:
 
   '@types/jsonwebtoken@9.0.5':
     resolution: {integrity: sha512-VRLSGzik+Unrup6BsouBeHsf4d1hOEgYWTm/7Nmw1sXoN1+tRly/Gy/po3yeahnP4jfnQWWAhQAqcNfH7ngOkA==}
+
+  '@types/luxon@3.4.2':
+    resolution: {integrity: sha512-TifLZlFudklWlMBfhubvgqTXRzLDI5pCbGa4P8a3wPyUQSW+1xQ5eDsreP9DWHX3tjq1ke96uYG/nwundroWcA==}
 
   '@types/methods@1.1.4':
     resolution: {integrity: sha512-ymXWVrDiCxTBE3+RIrrP533E70eA+9qu7zdWoHuOmGujkYtzf4HQF96b8nwHLqhuf4ykX61IGRIB38CC6/sImQ==}
@@ -4257,6 +4266,8 @@ snapshots:
   '@types/jsonwebtoken@9.0.5':
     dependencies:
       '@types/node': 20.16.11
+
+  '@types/luxon@3.4.2': {}
 
   '@types/methods@1.1.4': {}
 

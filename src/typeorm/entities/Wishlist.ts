@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, OneToOne } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+} from 'typeorm';
 import { User } from './User';
 import { WishlistItem } from './WishlistItems';
 
@@ -7,7 +14,7 @@ export class Wishlist {
   @PrimaryGeneratedColumn('uuid')
   wishlistId: string;
 
-  @OneToOne(() => User, (user) => user.wishlist, { cascade: true })
+  @OneToOne(() => User, (user) => user.wishlist)
   user: User;
 
   @OneToMany(() => WishlistItem, (wishlistItem) => wishlistItem.wishlist)

@@ -106,11 +106,11 @@ export class MailService {
     name: string,
     description: string,
     imagePath: string,
-    price: string,
+    price: number,
     category: string,
-    quantity: string,
-    discount: string,
-    size: string,
+    quantity: number,
+    discount: number,
+    size: string[],
   ) {
     const mailOptions = {
       from: process.env.EMAIL_USER,

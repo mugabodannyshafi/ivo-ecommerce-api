@@ -8,6 +8,8 @@ import { Category } from '../typeorm/entities/Category';
 import { Product } from '../typeorm/entities/Product';
 import { Subscription } from '../typeorm/entities/Subscription';
 import { BullModule } from '@nestjs/bull';
+import { MailService } from 'src/mail/mail.service';
+import { BaseService } from 'src/base.service';
 
 @Module({
   imports: [
@@ -17,6 +19,6 @@ import { BullModule } from '@nestjs/bull';
     }),
   ],
   controllers: [ProductsController],
-  providers: [ProductsService, JwtService],
+  providers: [ProductsService, JwtService, MailService, BaseService],
 })
 export class ProductsModule {}

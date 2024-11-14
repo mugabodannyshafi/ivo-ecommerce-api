@@ -16,6 +16,7 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
+import { PaginationQueryDto } from 'src/dto/pagination-query.dto';
 
 @Controller('products')
 export class ProductsController {
@@ -35,8 +36,8 @@ export class ProductsController {
   }
 
   @Get()
-  findAll(@Query('page') page: number) {
-    return this.productsService.findAll(page);
+  findAll(@Query() paginationDto: PaginationQueryDto) {
+    return this.productsService.findAll(paginationDto);
   }
 
   @Get('category')
@@ -45,6 +46,11 @@ export class ProductsController {
     @Query('page') page: number,
   ) {
     return this.productsService.findByCategory(category, page);
+  }
+
+  @Get('popular')
+  findPopular() {
+    return this.productsService.findPopular();
   }
 
   @Get(':id')

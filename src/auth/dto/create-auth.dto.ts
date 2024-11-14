@@ -41,5 +41,9 @@ export class UserDto {
 
   @IsString()
   @IsOptional()
+  sex?: string;
+
+  @IsString()
+  @IsOptional()
   address?: string;
 }

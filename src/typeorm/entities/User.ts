@@ -35,6 +35,9 @@ export class User {
   phoneNumber: string;
 
   @Column({ nullable: true })
+  sex: string;
+
+  @Column({ nullable: true })
   address: string;
 
   @Column({
@@ -58,19 +61,28 @@ export class User {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
 
-  @OneToMany(() => Order, (order) => order.user)
-  @JoinColumn()
+  @OneToMany(() => Order, (order) => order.user, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   orders: Order[];
 
-  @OneToMany(() => Payment, (payment) => payment.user)
-  @JoinColumn()
+  @OneToMany(() => Payment, (payment) => payment.user, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   payments: Payment[];
 
-  @OneToOne(() => ShoppingCart, (shoppingCart) => shoppingCart.user)
+  @OneToOne(() => ShoppingCart, (shoppingCart) => shoppingCart.user, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   shoppingCart: ShoppingCart;
 
-  @OneToOne(() => Wishlist, (wishlist) => wishlist.user)
+  @OneToOne(() => Wishlist, (wishlist) => wishlist.user, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   wishlist: Wishlist;
 }
